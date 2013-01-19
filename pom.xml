@@ -15,7 +15,7 @@
   <scm>
     <connection>scm:git:git://github.com/mihxil/mmlogging.git</connection>
     <url>scm:git:git://github.com/mihxil/mmlogging.git</url>
-    <developerConnection>scm:git:git://github.com/mihxil/mmlogging.git</developerConnection>
+    <developerConnection>scm:git:git://git@github.com:mihxil/mmlogging.git</developerConnection>
   </scm>
 
   <dependencies>
