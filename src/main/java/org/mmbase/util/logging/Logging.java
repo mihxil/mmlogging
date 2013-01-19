@@ -72,10 +72,20 @@ public class Logging {
     public final static String PAGE_CATEGORY = "org.mmbase.PAGE";
 
 
+	private static String machineName;
 
     private Logging() {
         // this class has no instances.
     }
+
+
+	public static String getMachineName() {
+		return machineName;
+	}
+	public static void setMachineName(String mn) {
+		machineName = mn;
+	}
+
 
 
 

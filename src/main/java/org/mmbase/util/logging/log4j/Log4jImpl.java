@@ -9,21 +9,16 @@ See http://www.MMBase.org/license
 
 package org.mmbase.util.logging.log4j;
 
-import org.mmbase.util.logging.Logger;
+import org.apache.log4j.xml.DOMConfigurator;
 import org.mmbase.util.logging.Level;
+import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
 import org.mmbase.util.logging.MDC;
 
-import org.mmbase.util.ResourceWatcher;
-import org.mmbase.util.ResourceLoader;
-import org.mmbase.core.event.*;
-
-import org.apache.log4j.xml.DOMConfigurator;
-
-import java.io.*;
-
-import java.io.PrintStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
 
 /**
  * This Logger implementation extends the Logger class from the log4j
@@ -48,28 +43,13 @@ public final class Log4jImpl extends org.apache.log4j.Logger  implements Logger 
 
     // It's enough to instantiate a factory once and for all.
     private final static org.apache.log4j.spi.LoggerRepository log4jRepository = new LoggerRepository(getRootLogger());
-    private static Logger log = Logging.getLoggerInstance(Log4jImpl.class);
+    static Logger log = Logging.getLoggerInstance(Log4jImpl.class);
 
     private static final String classname = Log4jImpl.class.getName();
 
     private static PrintStream stderr;
 
-    static {
-        EventManager.getInstance().addEventListener(new SystemEventListener() {
-                @Override
-                public void notify(SystemEvent se) {
-                    if (se instanceof SystemEvent.Shutdown) {
-                        log.info("Shutting down log4j");
-                        log4jRepository.shutdown();
-                    }
-                }
-                @Override
-                public int getWeight() {
-                    // logging should be shut down last
-                    return Integer.MAX_VALUE;
-                }
-            });
-    }
+
 
     protected Log4jImpl(String name) {
         super(name);
@@ -117,46 +97,26 @@ public final class Log4jImpl extends org.apache.log4j.Logger  implements Logger 
      * 1. cannot give the repository then. 2. Cannot log the happening
      * on normal way.
      *
-     * @param s A string to the xml-configuration file. Can be
+     * @param inputStream XML configuration file for logging
      * absolute, or relative to the Logging configuration file.
      **/
 
-    public static void configure(String s) {
+    public static void configure(InputStream inputStream) {
 
-        if (s != null && s.length() > 0) {
-            log.info("logging configurationfile : " + s);
+		doConfigure(inputStream);
 
-            ResourceLoader rl = Logging.getResourceLoader();
+		log = getLoggerInstance(Log4jImpl.class.getName());
 
-            log.info("using " + rl + " for resolving " + s + " -> " + rl.getResource(s));
-            ResourceWatcher configWatcher = new ResourceWatcher(rl) {
-                @Override
-                public void onChange(String s) {
-                    doConfigure(resourceLoader.getResourceAsStream(s));
-                }
-            };
+		Log4jImpl err = getLoggerInstance("STDERR");
+		// a trick: if the level of STDERR is FATAL, then stderr will not be captured at all.
+		if(err.getLevel() != Log4jLevel.FATAL) {
+			log.service("Redirecting stderr to MMBase logging (If you don't like this, then put the STDER logger to 'fatal')");
+			if (stderr == null) {
+				stderr = System.err;
+			}
+			System.setErr(new LoggerStream(err));
+		}
 
-            configWatcher.clear();
-            configWatcher.add(s);
-
-            doConfigure(rl.getResourceAsStream(s));
-
-            configWatcher.setDelay(10 * 1000); // check every 10 secs if config changed
-            configWatcher.start();
-            log = getLoggerInstance(Log4jImpl.class.getName());
-
-            Log4jImpl err = getLoggerInstance("STDERR");
-            // a trick: if the level of STDERR is FATAL, then stderr will not be captured at all.
-            if(err.getLevel() != Log4jLevel.FATAL) {
-                log.service("Redirecting stderr to MMBase logging (If you don't like this, then put the STDER logger to 'fatal')");
-                if (stderr == null) {
-                    stderr = System.err;
-                }
-                System.setErr(new LoggerStream(err));
-            }
-        } else {
-            log.debug("Not configuring log4j, because no configuration file given");
-        }
     }
 
     protected static void doConfigure(InputStream i) {

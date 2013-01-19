@@ -9,15 +9,9 @@ See http://www.MMBase.org/license
 
 package org.mmbase.util.logging.java;
 
-import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Level;
+import org.mmbase.util.logging.Logger;
 import org.mmbase.util.logging.Logging;
-
-
-import java.io.*;
-
-import org.mmbase.util.ResourceWatcher;
-import org.mmbase.util.ResourceLoader;
 
 /**
  * Since java 1.4 there is a Logger implemented in java itself; this MMBase Logger implementation
@@ -43,7 +37,7 @@ import org.mmbase.util.ResourceLoader;
 
 public final class Impl implements Logger {
 
-    private static final Logger log = Logging.getLoggerInstance(Impl.class);
+	static final Logger log = Logging.getLoggerInstance(Impl.class);
 
     private final java.util.logging.Logger logger;
 
@@ -72,44 +66,6 @@ public final class Impl implements Logger {
     }
 
 
-    /**
-     * Calls LogManager#readConfiguration, and feeds it with the configured InputStream. So you can
-     * configure java-logging. The file is watched, so you can add and change it later.
-     *
-     * There need not be a configuration file for java logging.
-     **/
-
-    public static void configure(String s) {
-        if ("".equals(s)) {
-            System.out.println("Using default java logging configuration");
-        } else {
-            try {
-                log.info("logging configurationfile : " + s);
-
-                ResourceLoader rl = Logging.getResourceLoader();
-
-                log.info("using " + rl + " for resolving " + s);
-                ResourceWatcher configWatcher = new ResourceWatcher(rl) {
-                    @Override
-                    public void onChange(String s) {
-                        try {
-                            log.info("Reading configuration file : " + s);
-                            java.util.logging.LogManager.getLogManager().readConfiguration(resourceLoader.getResourceAsStream(s));
-                        } catch (IOException ioe) {
-                            log.error(ioe);
-                        }
-                    }
-                };
-
-                configWatcher.add(s);
-                configWatcher.start();
-
-                java.util.logging.LogManager.getLogManager().readConfiguration(rl.getResourceAsStream(s));
-            } catch (IOException ioe) {
-                log.error(ioe);
-            }
-        }
-    }
 
     protected java.util.logging.Level getJavaLevel(Level p) {
         switch (p.toInt()) {
