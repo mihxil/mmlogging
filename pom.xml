@@ -16,7 +16,7 @@
 
 
   <scm>
-
+    <connection>scm:git:git://github.com/mihxil/mmlogging.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mihxil/mmlogging.git</developerConnection>
     <url>https://github.com/mihxil/mmlogging</url>
     <tag>HEAD</tag>
