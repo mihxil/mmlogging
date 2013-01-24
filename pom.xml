@@ -5,17 +5,18 @@
   <artifactId>mmlogging</artifactId>
   <name>mmlogging</name>
   <packaging>jar</packaging>
-  <version>1.0</version>
+  <version>1.0-SNAPSHOT</version>
 
   <properties>
-    <github.maven.repository>file:///Users/michiel/github/mvn-repo/</github.maven.repository>
+    <github.maven.repository>file:///Users/michiel/github/mihxil/mvn-repo/</github.maven.repository>
   </properties>
 
 
   <scm>
-    <connection>scm:git:git://github.com:mihxil/mmlogging.git</connection>
-    <url>scm:git:git://github.com/mihxil/mmlogging.git</url>
-    <developerConnection>scm:git:git@github.com:mihxil/mmlogging.git</developerConnection>
+    <connection>scm:git:git://github.com/mihxil/mmlogging.git</connection>
+    <developerConnection>scm:git:ssh://git@github.com/mihxil/mmlogging.git</developerConnection>
+    <url>https://github.com/mihxil/mmlogging</url>
+    <tag>HEAD</tag>
   </scm>
 
   <dependencies>
