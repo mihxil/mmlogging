@@ -1,14 +1,11 @@
 <?xml version="1.0"?>
-<project
-    xmlns="http://maven.apache.org/POM/4.0.0"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.meeuw</groupId>
   <artifactId>mmlogging</artifactId>
   <name>mmlogging</name>
   <packaging>jar</packaging>
-  <version>1.0-SNAPSHOT</version>
+  <version>1.0</version>
 
   <properties>
     <github.maven.repository>file:///Users/michiel/github/mihxil/mvn-repo/</github.maven.repository>
@@ -19,7 +16,7 @@
     <connection>scm:git:git://github.com/mihxil/mmlogging.git</connection>
     <developerConnection>scm:git:ssh://git@github.com/mihxil/mmlogging.git</developerConnection>
     <url>https://github.com/mihxil/mmlogging</url>
-    <tag>HEAD</tag>
+    <tag>REL-1.0</tag>
   </scm>
 
   <dependencies>
